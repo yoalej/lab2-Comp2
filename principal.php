@@ -57,6 +57,7 @@ $showRegistro = isset($_GET['registro']);
             }
             ?>
         </table>
+        <?php endif; ?>
     </div>
 </body>
 </html>
