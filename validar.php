@@ -1,17 +1,18 @@
 <?php
-include('conexion.php');
 session_start();
+require 'conexion.php';
 
-$user = $_POST['usuario'];
-$pass = $_POST['clave'];
+$correo = $_POST['correo'];
+$password = $_POST['password'];
 
-$consulta = "SELECT * FROM estudiantes WHERE usuario = '$user' AND clave = '$pass'";
-$resultado = mysqli_query($conexion, $consulta);
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE correo = ?");
+$stmt->execute([$correo]);
+$user = $stmt->fetch();
 
-if (mysqli_num_rows($resultado) > 0) {
-    $_SESSION['logueado'] = $user;
+if ($user && password_verify($password, $user['password'])) {
+    $_SESSION['usuario'] = $user['nombre'];
     header("Location: principal.php");
 } else {
-    echo "Usuario o clave incorrectos. <a href='index.php'>Intentar de nuevo</a>";
+    echo "Credenciales incorrectas <a href='index.php'>Volver</a>";
 }
 ?>
